@@ -13,8 +13,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model Book {
+  id              String   @id @default(uuid())
+  title           String
+  publicationDate DateTime
+  description     String
+  coverImageUrl   String?
+  stock           Int
+  isActive        Boolean  @default(true)
+
+  genre   Genre  @relation(fields: [genreId], references: [id])
+  genreId String
+
+  author   Author @relation(fields: [authorId], references: [id])
+  authorId String
+}
+
+model Author {
+  id        String   @id @default(uuid())
+  name      String
+  lastName  String
+  isActive  Boolean  @default(true)
+  bio       String
+  birthdate DateTime
+  books     Book[]
+}
+
+model Genre {
+  id       String  @id @default(uuid())
+  name     String
+  books    Book[]
+  isActive Boolean @default(true)
 }
